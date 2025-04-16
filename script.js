@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const helpModal = document.getElementById('help-modal');
     const helpBtn = document.getElementById('help-btn'); // Ensure you have a button with this ID in your HTML
     const closeHelpBtn = document.getElementById('close-help-btn');
+    const backgroundMusic = document.getElementById('background-music-player');
     
     // Plant States
     const MAX_GROWTH_DAYS = 100;
@@ -272,15 +273,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 helpModal.style.display = 'none';
             });
         }
+
+        // Toggle background music when the checkbox is changed
+        backgroundMusicCheckbox.addEventListener('change', function () {
+            if (backgroundMusicCheckbox.checked) {
+                backgroundMusic.play();
+            } else {
+                backgroundMusic.pause();
+            }
+
+            // Save the updated setting
+            saveSettings();
+        });
     }
 
     function applySettings(settings) {
         if (settings.backgroundMusic) {
             // Example: Start background music
-            console.log("Background music enabled");
+            backgroundMusic.play();
         } else {
             // Example: Stop background music
-            console.log("Background music disabled");
+            backgroundMusic.pause();
         }
 
         if (settings.soundEffects) {
@@ -665,5 +678,16 @@ const stateToSave = { ...plantState };
 stateToSave.lastVisit = new Date();
 
 localStorage.setItem('plantFriend', JSON.stringify(stateToSave));
+}
+
+function saveSettings() {
+    const settings = {
+        notifyWater: document.getElementById("notify-water").checked,
+        notifyTask: document.getElementById("notify-task").checked,
+        soundEffects: document.getElementById("sound-effects").checked,
+        backgroundMusic: backgroundMusicCheckbox.checked,
+        difficulty: document.getElementById("difficulty").value,
+    };
+    localStorage.setItem("plantPalSettings", JSON.stringify(settings));
 }
 });
