@@ -1035,3 +1035,11 @@ footer {
 .shake {
     animation: shake 0.5s;
 }
+
+a {
+    color: var(--primary-green);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
