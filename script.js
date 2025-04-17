@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const helpBtn = document.getElementById('help-btn'); // Ensure you have a button with this ID in your HTML
     const closeHelpBtn = document.getElementById('close-help-btn');
     const backgroundMusic = document.getElementById('background-music-player');
+    const fertilizeBtn = document.getElementById('fertilize-btn');
     
     // Plant States
     const MAX_GROWTH_DAYS = 100;
@@ -122,6 +123,156 @@ document.addEventListener('DOMContentLoaded', function() {
             description: "Complete a significant project ahead of schedule", 
             duration: 60 * 60,
             difficulty: 4
+        },
+        {
+            description: "Write down three things you're grateful for", 
+            duration: 5 * 60, // seconds
+            difficulty: 1
+        },
+        {
+            description: "Drink a full glass of water", 
+            duration: 2 * 60,
+            difficulty: 1
+        },
+        {
+            description: "Do 10 jumping jacks", 
+            duration: 1 * 60,
+            difficulty: 1
+        },
+        {
+            description: "Organize one small area (desk drawer, shelf, etc.)", 
+            duration: 15 * 60,
+            difficulty: 2
+        },
+        {
+            description: "Meditate for 10 minutes", 
+            duration: 10 * 60,
+            difficulty: 2
+        },
+        {
+            description: "Reply to 3 pending emails or messages", 
+            duration: 15 * 60,
+            difficulty: 2
+        },
+        {
+            description: "Go for a 20-minute walk without looking at your phone", 
+            duration: 20 * 60,
+            difficulty: 2
+        },
+        {
+            description: "Read 20 pages of a book", 
+            duration: 30 * 60,
+            difficulty: 3
+        },
+        {
+            description: "Clean your entire kitchen", 
+            duration: 45 * 60,
+            difficulty: 3
+        },
+        {
+            description: "Learn 10 words in a new language", 
+            duration: 25 * 60,
+            difficulty: 3
+        },
+        {
+            description: "Do a digital detox for 3 hours", 
+            duration: 180 * 60,
+            difficulty: 4
+        },
+        {
+            description: "Cook a meal from scratch", 
+            duration: 60 * 60,
+            difficulty: 3
+        },
+        {
+            description: "Complete a workout routine", 
+            duration: 45 * 60,
+            difficulty: 3
+        },
+        {
+            description: "Plan your meals for the entire week", 
+            duration: 40 * 60,
+            difficulty: 3
+        },
+        {
+            description: "Learn a new skill via online tutorial", 
+            duration: 60 * 60,
+            difficulty: 3
+        },
+        {
+            description: "Write a handwritten letter to someone", 
+            duration: 30 * 60,
+            difficulty: 2
+        },
+        {
+            description: "Practice an instrument for 30 minutes", 
+            duration: 30 * 60,
+            difficulty: 3
+        },
+        {
+            description: "Complete a crossword puzzle", 
+            duration: 25 * 60,
+            difficulty: 2
+        },
+        {
+            description: "Go for a 5K run", 
+            duration: 30 * 60,
+            difficulty: 4
+        },
+        {
+            description: "Declutter your digital photos for 45 minutes", 
+            duration: 45 * 60,
+            difficulty: 3
+        },
+        {
+            description: "Complete a home maintenance task you've been avoiding", 
+            duration: 60 * 60,
+            difficulty: 4
+        },
+        {
+            description: "Have a tech-free evening (4 hours)", 
+            duration: 240 * 60,
+            difficulty: 4
+        },
+        {
+            description: "Deep clean your bathroom", 
+            duration: 45 * 60,
+            difficulty: 3
+        },
+        {
+            description: "Take a nap with no alarms set", 
+            duration: 30 * 60,
+            difficulty: 2
+        },
+        {
+            description: "Do a random act of kindness for someone", 
+            duration: 15 * 60,
+            difficulty: 2
+        },
+        {
+            description: "Write in a journal for 15 minutes", 
+            duration: 15 * 60,
+            difficulty: 2
+        },
+        {
+            description: "Call a friend or family member you haven't spoken to recently", 
+            duration: 30 * 60,
+            difficulty: 2
+        },
+        {
+            description: "Create a vision board for your goals", 
+            duration: 60 * 60,
+            difficulty: 3
+        },
+        {
+            description: "Listen to a complete album without interruptions", 
+            duration: 45 * 60,
+            difficulty: 2
+        },
+        {
+            description: "PLay a board game or card game with someone", 
+            duration: 90 * 60,
+            difficulty: 3
         }
     ];
 
@@ -190,15 +341,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function setupEventListeners() {
-        startBtn.addEventListener('click', function() {
+        startBtn.addEventListener('click', function () {
             const plantName = plantNameInput.value.trim();
-
+        
             if (plantName) {
                 potNameElement.textContent = plantName; // Update the pot name
                 welcomeModal.style.display = "none"; // Close the welcome modal
-                plantState.name = plantName;
+                plantState.name = plantName; // Save the name in plantState
+                savePlantState(); // Persist the state in localStorage
                 showNotification("Let's Grow!", `Meet ${plantName}, your new plant friend! Water it daily and help it grow by completing tasks.`);
-                savePlantState();
                 updateUI();
             } else {
                 alert("Please enter a name for your plant!"); // Prompt user to enter a name
@@ -284,6 +435,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Save the updated setting
             saveSettings();
+        });
+
+        document.getElementById('fertilize-btn').addEventListener('click', function () {
+            const plant = document.getElementById('plant');
+            
+            // Add the fertilize animation class
+            plant.classList.add('fertilize-animation');
+            
+            // Show a notification or update the plant status
+            const notificationText = document.getElementById('notification-text');
+            notificationText.textContent = 'Your plant has been fertilized!';
+            document.getElementById('notification-modal').style.display = 'flex';
+        
+            // Remove the animation class after it completes
+            setTimeout(() => {
+                plant.classList.remove('fertilize-animation');
+            }, 2000); // Match the duration of the animation
         });
     }
 
@@ -673,11 +841,9 @@ notificationModal.style.display = 'flex';
 }
 
 function savePlantState() {
-// Convert Date objects to strings for storage
-const stateToSave = { ...plantState };
-stateToSave.lastVisit = new Date();
-
-localStorage.setItem('plantFriend', JSON.stringify(stateToSave));
+    const stateToSave = { ...plantState };
+    stateToSave.lastVisit = new Date(); // Convert Date objects to strings for storage
+    localStorage.setItem('plantFriend', JSON.stringify(stateToSave));
 }
 
 function saveSettings() {

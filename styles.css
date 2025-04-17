@@ -1036,6 +1036,25 @@ footer {
     animation: shake 0.5s;
 }
 
+@keyframes fertilizeEffect {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: brightness(1.5);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+.fertilize-animation {
+    animation: fertilizeEffect 2s ease-in-out;
+}
+
 a {
     color: var(--primary-green);
     text-decoration: none;
